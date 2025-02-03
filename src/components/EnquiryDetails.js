@@ -38,6 +38,9 @@ const EnquiryDetails = ({ enquiry }) => {
             <strong>Notes:</strong> {enquiry.customerDetails.notes}
           </p>
         )}
+        <p>
+          <strong>Enquired At:</strong> {formatDateTime(enquiry.createdAt)}
+        </p>
       </div>
 
       {/* Order Summary */}
@@ -67,14 +70,6 @@ const EnquiryDetails = ({ enquiry }) => {
         ))}
         <p className="text-lg font-bold text-right mt-2">
           Total: ₹{enquiry.totalAmount}
-        </p>
-      </div>
-
-      {/* Order Timestamp */}
-      <div>
-        <h2 className="text-lg font-semibold">Order Timestamp</h2>
-        <p>
-          <strong>Created At:</strong> {formatDateTime(enquiry.createdAt)}
         </p>
       </div>
     </div>
