@@ -10,7 +10,7 @@ const Layout = ({ children }) => {
       {isLoggedIn ? (
         <div className="flex h-screen bg-gray-100">
           {/* Sidebar */}
-          <div className="w-64 bg-blue-800 text-white">
+          <div className="w-64 bg-blue-800 text-white hidden md:block">
             {/* Logo */}
             <div className="p-6 text-2xl font-bold text-center">Gandhiram</div>
 
