@@ -9,154 +9,136 @@ import { toast } from "react-toastify";
 
 export default function AddProduct() {
   const router = useRouter();
-  const [previewImage, setPreviewImage] = useState(null);
+  const [previewImages, setPreviewImages] = useState([]);
 
   const formik = useFormik({
     initialValues: {
       title: "",
+      shortDescription: "",
+      originalPrice: "",
       price: "",
-      image: null,
+      material: "",
+      dimensions: "",
+      embroideryType: "",
+      closureType: "",
+      pockets: "",
+      images: [],
     },
     validationSchema: Yup.object({
       title: Yup.string().required("Product title is required"),
-      price: Yup.string()
-        .matches(/^\d*$/, "Price must contain only numbers")
-        .required("Price is required"),
-      image: Yup.mixed().required("Image is required"),
+      shortDescription: Yup.string().required("Short description is required"),
+      originalPrice: Yup.number().required("Original price is required"),
+      price: Yup.number().required("Price is required"),
+      material: Yup.string().required("Material is required"),
+      dimensions: Yup.string().required("Dimensions are required"),
+      embroideryType: Yup.string().required("Embroidery type is required"),
+      closureType: Yup.string().required("Closure type is required"),
+      pockets: Yup.string().required("Pocket details are required"),
+      images: Yup.array().min(1, "At least one image is required"),
     }),
     onSubmit: async (values) => {
       const productData = new FormData();
-      productData.append("title", values.title);
-      productData.append("price", values.price);
-      productData.append("image", values.image);
+      Object.entries(values).forEach(([key, value]) => {
+        if (key === "images") {
+          value.forEach((file) => productData.append("images", file));
+        } else {
+          productData.append(key, value);
+        }
+      });
       await api.products.create(productData);
       formik.resetForm();
-      setPreviewImage(null);
+      setPreviewImages([]);
       toast.success("Product added successfully!");
       router.push("/products");
     },
   });
 
   const handleImageChange = (event) => {
-    const file = event.target.files[0];
-    formik.setFieldValue("image", file);
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        setPreviewImage(reader.result);
-      };
-      reader.readAsDataURL(file);
-    } else {
-      setPreviewImage(null);
-    }
-  };
-
-  const handleRemoveImage = () => {
-    formik.setFieldValue("image", null);
-    setPreviewImage(null);
-    document.getElementById("image").value = "";
-  };
-
-  const handlePriceChange = (event) => {
-    const value = event.target.value;
-    if (/^\d*$/.test(value)) {
-      formik.setFieldValue("price", value);
-    }
+    const files = Array.from(event.target.files);
+    formik.setFieldValue("images", files);
+    const previews = files.map((file) => URL.createObjectURL(file));
+    setPreviewImages(previews);
   };
 
   return (
     <div className="flex items-center justify-center">
-      <div className="bg-white shadow-lg rounded-lg p-8 max-w-md w-full">
+      <div className="bg-white shadow-lg rounded-lg p-8 max-w-lg w-full">
         <h1 className="text-2xl font-bold mb-4 text-gray-800">Add Product</h1>
         <form onSubmit={formik.handleSubmit} className="space-y-4">
-          <div>
-            <label
-              className="block text-gray-700 font-medium mb-2"
-              htmlFor="name"
-            >
-              Product Title
-            </label>
-            <input
-              type="text"
-              id="name"
-              name="title"
-              value={formik.values.title}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              className={`w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 ${
-                formik.touched.title && formik.errors.title
-                  ? "border-red-500 focus:ring-red-500"
-                  : "border-gray-300 focus:ring-blue-500"
-              }`}
-              placeholder="Enter product title"
-            />
-            {formik.touched.title && formik.errors.title ? (
-              <p className="text-red-500 text-sm mt-1">{formik.errors.title}</p>
-            ) : null}
-          </div>
+          {[
+            { name: "title", label: "Product Title", type: "text" },
+            {
+              name: "shortDescription",
+              label: "Short Description",
+              type: "text",
+            },
+            { name: "originalPrice", label: "Original Price", type: "number" },
+            { name: "price", label: "Discounted Price", type: "number" },
+            { name: "material", label: "Material", type: "text" },
+            { name: "dimensions", label: "Dimensions", type: "text" },
+            { name: "embroideryType", label: "Embroidery Type", type: "text" },
+            { name: "closureType", label: "Closure Type", type: "text" },
+            { name: "pockets", label: "Pockets", type: "text" },
+          ].map(({ name, label, type }) => (
+            <div key={name}>
+              <label
+                className="block text-gray-700 font-medium mb-2"
+                htmlFor={name}
+              >
+                {label}
+              </label>
+              <input
+                type={type}
+                id={name}
+                name={name}
+                value={formik.values[name]}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                className={`w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 ${
+                  formik.touched[name] && formik.errors[name]
+                    ? "border-red-500 focus:ring-red-500"
+                    : "border-gray-300 focus:ring-blue-500"
+                }`}
+                placeholder={`Enter ${label.toLowerCase()}`}
+              />
+              {formik.touched[name] && formik.errors[name] ? (
+                <p className="text-red-500 text-sm mt-1">
+                  {formik.errors[name]}
+                </p>
+              ) : null}
+            </div>
+          ))}
 
           <div>
             <label
               className="block text-gray-700 font-medium mb-2"
-              htmlFor="price"
+              htmlFor="images"
             >
-              Price
-            </label>
-            <input
-              type="text"
-              id="price"
-              name="price"
-              value={formik.values.price}
-              onChange={handlePriceChange}
-              onBlur={formik.handleBlur}
-              className={`w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 ${
-                formik.touched.price && formik.errors.price
-                  ? "border-red-500 focus:ring-red-500"
-                  : "border-gray-300 focus:ring-blue-500"
-              }`}
-              placeholder="Enter product price"
-            />
-            {formik.touched.price && formik.errors.price ? (
-              <p className="text-red-500 text-sm mt-1">{formik.errors.price}</p>
-            ) : null}
-          </div>
-
-          <div>
-            <label
-              className="block text-gray-700 font-medium mb-2"
-              htmlFor="image"
-            >
-              Image
+              Images
             </label>
             <input
               type="file"
-              id="image"
-              name="image"
+              id="images"
+              name="images"
+              multiple
               onChange={handleImageChange}
-              onBlur={formik.handleBlur}
-              className={`w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 ${
-                formik.touched.image && formik.errors.image
-                  ? "border-red-500 focus:ring-red-500"
-                  : "border-gray-300 focus:ring-blue-500"
-              }`}
+              className="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 border-gray-300 focus:ring-blue-500"
             />
-            {formik.touched.image && formik.errors.image ? (
-              <p className="text-red-500 text-sm mt-1">{formik.errors.image}</p>
-            ) : null}
-            {previewImage && (
-              <div className="mt-4">
-                <img
-                  src={previewImage}
-                  alt="Preview"
-                  className="w-full h-auto rounded-lg mb-2"
-                />
-                <button
-                  type="button"
-                  onClick={handleRemoveImage}
-                  className="text-white bg-red-500 px-4 py-2 rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
-                >
-                  Remove Image
-                </button>
+            {formik.errors.images && (
+              <p className="text-red-500 text-sm mt-1">
+                {formik.errors.images}
+              </p>
+            )}
+            {previewImages.length > 0 && (
+              <div className="mt-4 grid grid-cols-3 gap-2">
+                {previewImages.map((src, index) => (
+                  <img
+                    key={index}
+                    src={src}
+                    alt="Preview"
+                    className="w-full h-auto rounded-lg"
+                  />
+                ))}
               </div>
             )}
           </div>

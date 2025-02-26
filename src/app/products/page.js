@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 
 const Products = () => {
   const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
@@ -20,6 +21,8 @@ const Products = () => {
         setProducts(products);
       } catch (error) {
         handleError(error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -34,9 +37,6 @@ const Products = () => {
     if (confirm("Are you sure you want to delete this product?")) {
       try {
         await api.products.delete(id);
-        setProducts((prevProducts) =>
-          prevProducts.filter((product) => product._id !== id)
-        );
         setProducts((prevProducts) =>
           prevProducts.filter((product) => product._id !== id)
         );
@@ -59,34 +59,40 @@ const Products = () => {
             Add Product
           </button>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {products.map((product) => (
-            <div
-              key={product._id}
-              className="bg-white rounded-md shadow-md overflow-hidden p-3"
-            >
-              <Image
-                src={product.imageUpload.s3Location}
-                alt={product.title}
-                width={300}
-                height={200}
-                className="w-full h-auto max-h-40 object-contain rounded-md"
-              />
-              <div className="mt-3 flex justify-between items-center">
-                <div>
-                  <h2 className="text-md font-semibold">{product.title}</h2>
-                  <p className="text-gray-700 font-medium">₹{product.price}</p>
+        {loading ? (
+          <p className="text-center text-gray-500">Loading products...</p>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {products.map((product) => (
+              <div
+                key={product._id}
+                className="bg-white rounded-md shadow-md overflow-hidden p-3"
+              >
+                <Image
+                  src={product.images?.[0]?.s3Location || "/placeholder.png"}
+                  alt={product.title}
+                  width={300}
+                  height={200}
+                  className="w-full h-auto max-h-40 object-contain rounded-md"
+                />
+                <div className="mt-3 flex justify-between items-center">
+                  <div>
+                    <h2 className="text-md font-semibold">{product.title}</h2>
+                    <p className="text-gray-700 font-medium">
+                      ₹{product.price}
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => handleDeleteProduct(product._id)}
+                    className="bg-red-500 text-white px-3 py-1 rounded-md shadow-md hover:bg-red-600"
+                  >
+                    Delete
+                  </button>
                 </div>
-                <button
-                  onClick={() => handleDeleteProduct(product._id)}
-                  className="bg-red-500 text-white px-3 py-1 rounded-md shadow-md hover:bg-red-600"
-                >
-                  Delete
-                </button>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
