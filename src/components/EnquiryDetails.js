@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 
 const formatDateTime = (dateString) => {
   const date = new Date(dateString);
@@ -59,7 +60,11 @@ const EnquiryDetails = ({ enquiry }) => {
                 height={60}
               />
               <div>
-                <p className="font-medium">{product.title}</p>
+                <Link href={`/products/${product._id}`}>
+                  <p className="font-medium blue-600 underline">
+                    {product.title}
+                  </p>
+                </Link>
                 <p className="text-gray-500">
                   ₹{product.price} x {quantity}
                 </p>

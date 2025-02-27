@@ -73,7 +73,8 @@ const Products = () => {
                   alt={product.title}
                   width={300}
                   height={200}
-                  className="w-full h-auto max-h-40 object-contain rounded-md"
+                  className="w-full h-auto max-h-40 object-contain rounded-md cursor-pointer"
+                  onClick={() => router.push(`/products/${product._id}`)}
                 />
                 <div className="mt-3 flex justify-between items-center">
                   <div>
