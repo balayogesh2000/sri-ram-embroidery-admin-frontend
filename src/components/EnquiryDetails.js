@@ -46,26 +46,26 @@ const EnquiryDetails = ({ enquiry }) => {
       {/* Order Summary */}
       <div className="border-b pb-4 mb-4">
         <h2 className="text-lg font-semibold">Order Summary</h2>
-        {enquiry.cart.map((item) => (
+        {enquiry.cart.map(({ _id, product, quantity }) => (
           <div
-            key={item._id}
+            key={_id}
             className="flex items-center justify-between border-b py-2"
           >
             <div className="flex items-center gap-4">
               <Image
-                src={item.imageUpload.s3Location}
-                alt={item.imageUpload.filename}
+                src={product?.images[0]?.s3Location}
+                alt={product.title}
                 width={60}
                 height={60}
               />
               <div>
-                <p className="font-medium">{item.title}</p>
+                <p className="font-medium">{product.title}</p>
                 <p className="text-gray-500">
-                  ₹{item.price} x {item.quantity}
+                  ₹{product.price} x {quantity}
                 </p>
               </div>
             </div>
-            <p className="font-semibold">₹{item.price * item.quantity}</p>
+            <p className="font-semibold">₹{product.price * quantity}</p>
           </div>
         ))}
         <p className="text-lg font-bold text-right mt-2">
