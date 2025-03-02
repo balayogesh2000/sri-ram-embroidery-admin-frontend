@@ -13,6 +13,7 @@ import { ArrowLeft } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import api from "@/lib/api";
 import handleError from "@/utils/handleError";
+import { toast } from "react-toastify";
 
 export default function ProductPage() {
   const [product, setProduct] = useState(null);
@@ -20,7 +21,7 @@ export default function ProductPage() {
   const { productId } = useParams();
 
   const handleBackClick = () => {
-    router.back(); // Navigate to the previous page
+    router.back();
   };
 
   useEffect(() => {
@@ -44,11 +45,39 @@ export default function ProductPage() {
     ((product.originalPrice - product.price) / product.originalPrice) * 100
   );
 
+  const handleRestoreProduct = async (id) => {
+    if (confirm("Are you sure you want to restore this product?")) {
+      try {
+        const {
+          data: { product },
+        } = await api.products.restore(id);
+        setProduct(product);
+        toast.success("Product restored successfully!");
+      } catch (error) {
+        handleError(error);
+      }
+    }
+  };
+
+  const handleArchiveProduct = async (id) => {
+    if (confirm("Are you sure you want to archive this product?")) {
+      try {
+        const {
+          data: { product },
+        } = await api.products.archive(id);
+        setProduct(product);
+        toast.success("Product archived successfully!");
+      } catch (error) {
+        handleError(error);
+      }
+    }
+  };
+
   return (
     <section className="mx-auto">
       <div className="mb-6">
         <button onClick={handleBackClick} className="text-gray-600">
-          <ArrowLeft size={24} /> {/* Only the back icon */}
+          <ArrowLeft size={24} />
         </button>
       </div>
       <div className="grid md:grid-cols-2 gap-6 items-stretch">
@@ -77,6 +106,34 @@ export default function ProductPage() {
 
         {/* Product Details */}
         <div>
+          <div className="flex items-center gap-2">
+            {product.archived ? (
+              <>
+                <div className="bg-red-600 text-white text-xs font-semibold px-3 py-1 rounded-full shadow-md w-fit">
+                  Archived
+                </div>
+                <button
+                  onClick={() => handleRestoreProduct(product._id)}
+                  className="bg-green-500 text-white text-xs font-semibold px-3 py-1 rounded-md shadow-md hover:bg-green-600"
+                >
+                  Restore
+                </button>
+              </>
+            ) : (
+              <>
+                <div className="bg-green-600 text-white text-xs font-semibold px-3 py-1 rounded-full shadow-md w-fit">
+                  Active
+                </div>
+                <button
+                  onClick={() => handleArchiveProduct(product._id)}
+                  className="bg-gray-500 text-white text-xs font-semibold px-3 py-1 rounded-md shadow-md hover:bg-gray-600"
+                >
+                  Archive
+                </button>
+              </>
+            )}
+          </div>
+
           <h1 className="text-3xl font-semibold text-gray-800">
             {product.title}
           </h1>

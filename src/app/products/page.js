@@ -17,7 +17,7 @@ const Products = () => {
       try {
         const {
           data: { products },
-        } = await api.products.getAll();
+        } = await api.products.getAllActiveProducts();
         setProducts(products);
       } catch (error) {
         handleError(error);
@@ -33,14 +33,18 @@ const Products = () => {
     router.push("/products/add");
   };
 
-  const handleDeleteProduct = async (id) => {
-    if (confirm("Are you sure you want to delete this product?")) {
+  const handleViewArchived = () => {
+    router.push("/products/archived");
+  };
+
+  const handleArchiveProduct = async (id) => {
+    if (confirm("Are you sure you want to archive this product?")) {
       try {
-        await api.products.delete(id);
+        await api.products.archive(id);
         setProducts((prevProducts) =>
           prevProducts.filter((product) => product._id !== id)
         );
-        toast.success("Product deleted successfully!");
+        toast.success("Product archived successfully!");
       } catch (error) {
         handleError(error);
       }
@@ -52,12 +56,20 @@ const Products = () => {
       <div className="container mx-auto">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold">Products</h1>
-          <button
-            onClick={handleAddProduct}
-            className="bg-blue-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-blue-600"
-          >
-            Add Product
-          </button>
+          <div className="flex gap-3">
+            <button
+              onClick={handleViewArchived}
+              className="bg-gray-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-gray-600"
+            >
+              View Archived Products
+            </button>
+            <button
+              onClick={handleAddProduct}
+              className="bg-blue-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-blue-600"
+            >
+              Add Product
+            </button>
+          </div>
         </div>
         {loading ? (
           <p className="text-center text-gray-500">Loading products...</p>
@@ -84,10 +96,10 @@ const Products = () => {
                     </p>
                   </div>
                   <button
-                    onClick={() => handleDeleteProduct(product._id)}
+                    onClick={() => handleArchiveProduct(product._id)}
                     className="bg-red-500 text-white px-3 py-1 rounded-md shadow-md hover:bg-red-600"
                   >
-                    Delete
+                    Archive
                   </button>
                 </div>
               </div>
