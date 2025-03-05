@@ -11,6 +11,7 @@ const withAuth = (Component) => {
     useEffect(() => {
       if (!loading) {
         if (!isLoggedIn) {
+          setAuthorized(false);
           router.push("/login");
         } else {
           setAuthorized(true);
@@ -18,8 +19,7 @@ const withAuth = (Component) => {
       }
     }, [isLoggedIn, loading, router]);
 
-    if (loading) return null;
-    if (!authorized) return null;
+    if (loading || !authorized) return null;
 
     return <Component {...props} />;
   };

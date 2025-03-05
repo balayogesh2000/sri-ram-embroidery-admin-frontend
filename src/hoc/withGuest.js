@@ -9,8 +9,11 @@ const withGuest = (Component) => {
     const [isAllowed, setIsAllowed] = useState(false);
 
     useEffect(() => {
-      if (!loading) {
+      if (loading) {
+        setIsAllowed(false);
+      } else {
         if (isLoggedIn) {
+          setIsAllowed(false);
           router.push("/");
         } else {
           setIsAllowed(true);
@@ -18,8 +21,7 @@ const withGuest = (Component) => {
       }
     }, [isLoggedIn, loading, router]);
 
-    if (loading) return null;
-    if (!isAllowed) return null;
+    if (loading || !isAllowed) return null;
 
     return <Component {...props} />;
   };
