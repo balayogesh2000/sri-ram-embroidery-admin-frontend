@@ -11,6 +11,8 @@ const products = {
   getAllArchivedProducts: async () =>
     (await axiosServerInstance.get("/products/archived")).data,
   getOne: async (id) => (await axiosServerInstance.get(`/products/${id}`)).data,
+  update: async (id, data) =>
+    (await axiosServerInstance.patch(`/products/${id}`, data)).data,
 };
 
 export default products;
