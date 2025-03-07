@@ -7,6 +7,7 @@ import api from "@/lib/api";
 import handleError from "@/utils/handleError";
 import ProductCard from "@/components/Products/ProductCard";
 import PageHeader from "@/components/PageHeader";
+import { toast } from "react-toastify";
 
 const Products = () => {
   const [products, setProducts] = useState([]);
@@ -29,6 +30,19 @@ const Products = () => {
 
     fetchProducts();
   }, []);
+
+  const handleArchiveProduct = async (id) => {
+    if (!confirm("Are you sure you want to archive this product?")) return;
+    try {
+      await api.products.archive(id);
+      setProducts((prevProducts) =>
+        prevProducts.filter((product) => product._id !== id)
+      );
+      toast.success("Product archived successfully");
+    } catch (error) {
+      handleError(error);
+    }
+  };
 
   return (
     <div className="p-4">
@@ -60,7 +74,11 @@ const Products = () => {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {products.map((product) => (
-              <ProductCard key={product._id} product={product} />
+              <ProductCard
+                key={product._id}
+                product={product}
+                handleArchiveProduct={handleArchiveProduct}
+              />
             ))}
           </div>
         )}
