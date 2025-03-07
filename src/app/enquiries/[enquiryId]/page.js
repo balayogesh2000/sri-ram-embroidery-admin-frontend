@@ -87,15 +87,15 @@ const Enquiry = () => {
         <div className="space-y-4">
           <h2 className="text-lg font-semibold border-b pb-2">Order Summary</h2>
           <div className="space-y-4">
-            {enquiry.cart.map(({ _id, product, quantity }) => (
+            {enquiry.cart.map(({ _id, product, productSnapshot, quantity }) => (
               <div
                 key={_id}
                 className="flex items-center justify-between border rounded-lg p-4"
               >
                 <div className="flex items-center gap-4">
                   <Image
-                    src={product?.images[0]?.s3Location}
-                    alt={product.title}
+                    src={productSnapshot?.images[0]?.s3Location}
+                    alt={productSnapshot.title}
                     width={60}
                     height={60}
                     className="rounded-md"
@@ -105,15 +105,15 @@ const Enquiry = () => {
                       href={`/products/${product._id}`}
                       className="text-blue-600 underline font-medium"
                     >
-                      {product.title}
+                      {productSnapshot.title}
                     </Link>
                     <p className="text-gray-500">
-                      ₹{product.price} x {quantity}
+                      ₹{productSnapshot.price} x {quantity}
                     </p>
                   </div>
                 </div>
                 <p className="font-semibold text-gray-900">
-                  ₹{product.price * quantity}
+                  ₹{productSnapshot.price * quantity}
                 </p>
               </div>
             ))}
