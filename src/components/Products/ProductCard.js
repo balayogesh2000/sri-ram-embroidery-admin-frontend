@@ -29,20 +29,21 @@ const ProductCard = ({ product, handleDeleteProduct }) => {
           {/* Price in green on the left */}
           <p className="text-green-600 font-medium">₹{product.price}</p>
 
-          {/* Edit & Archive buttons on the right end */}
-          <div className="flex gap-2 w-1/2">
-            <button
-              onClick={() => handleEditProduct(product._id)}
-              className="bg-yellow-500 text-white text-xs px-2 py-1 rounded-md shadow-md hover:bg-yellow-600 w-1/2"
-            >
-              Edit
-            </button>
-            <button
-              onClick={() => handleDeleteProduct(product._id)}
-              className="bg-red-500 text-white text-xs px-2 py-1 rounded-md shadow-md hover:bg-red-600 w-1/2"
-            >
-              Delete
-            </button>
+          <div className="flex flex-col items-end gap-2 w-1/2">
+            <div className="flex gap-2 w-full">
+              <button
+                onClick={() => handleEditProduct(product._id)}
+                className="bg-yellow-500 text-white text-xs px-2 py-1 rounded-md shadow-md hover:bg-yellow-600 w-1/2"
+              >
+                Edit
+              </button>
+              <button
+                onClick={() => handleDeleteProduct(product._id)}
+                className="bg-red-500 text-white text-xs px-2 py-1 rounded-md shadow-md hover:bg-red-600 w-1/2"
+              >
+                Delete
+              </button>
+            </div>
           </div>
         </div>
       </div>

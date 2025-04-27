@@ -45,34 +45,6 @@ export default function ProductPage() {
     ((product.originalPrice - product.price) / product.originalPrice) * 100
   );
 
-  const handleRestoreProduct = async (id) => {
-    if (confirm("Are you sure you want to restore this product?")) {
-      try {
-        const {
-          data: { product },
-        } = await api.products.restore(id);
-        setProduct(product);
-        toast.success("Product restored successfully!");
-      } catch (error) {
-        handleError(error);
-      }
-    }
-  };
-
-  const handleArchiveProduct = async (id) => {
-    if (confirm("Are you sure you want to archive this product?")) {
-      try {
-        const {
-          data: { product },
-        } = await api.products.archive(id);
-        setProduct(product);
-        toast.success("Product archived successfully!");
-      } catch (error) {
-        handleError(error);
-      }
-    }
-  };
-
   return (
     <section className="mx-auto">
       <div className="mb-6">
@@ -106,34 +78,6 @@ export default function ProductPage() {
 
         {/* Product Details */}
         <div>
-          <div className="flex items-center gap-2">
-            {product.archived ? (
-              <>
-                <div className="bg-red-600 text-white text-xs font-semibold px-3 py-1 rounded-full shadow-md w-fit">
-                  Archived
-                </div>
-                <button
-                  onClick={() => handleRestoreProduct(product._id)}
-                  className="bg-green-500 text-white text-xs font-semibold px-3 py-1 rounded-md shadow-md hover:bg-green-600"
-                >
-                  Restore
-                </button>
-              </>
-            ) : (
-              <>
-                <div className="bg-green-600 text-white text-xs font-semibold px-3 py-1 rounded-full shadow-md w-fit">
-                  Active
-                </div>
-                <button
-                  onClick={() => handleArchiveProduct(product._id)}
-                  className="bg-gray-500 text-white text-xs font-semibold px-3 py-1 rounded-md shadow-md hover:bg-gray-600"
-                >
-                  Archive
-                </button>
-              </>
-            )}
-          </div>
-
           <h1 className="text-3xl font-semibold text-gray-800">
             {product.title}
           </h1>
@@ -146,6 +90,11 @@ export default function ProductPage() {
             <span className="text-sm font-medium text-red-500">
               ({discountPercentage}% off)
             </span>
+            {product.status === "inactive" ? (
+              <span className="text-xs text-yellow-500 font-semibold ml-2">
+                Inactive
+              </span>
+            ) : null}
           </p>
           {/* Specifications */}
           <ul className="mt-4 space-y-2 text-gray-700 text-sm">
