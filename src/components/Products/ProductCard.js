@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
-const ProductCard = ({ product, handleArchiveProduct }) => {
+const ProductCard = ({ product, handleDeleteProduct }) => {
   const router = useRouter();
 
   const handleEditProduct = (id) => {
@@ -38,10 +38,10 @@ const ProductCard = ({ product, handleArchiveProduct }) => {
               Edit
             </button>
             <button
-              onClick={() => handleArchiveProduct(product._id)}
+              onClick={() => handleDeleteProduct(product._id)}
               className="bg-red-500 text-white text-xs px-2 py-1 rounded-md shadow-md hover:bg-red-600 w-1/2"
             >
-              Archive
+              Delete
             </button>
           </div>
         </div>

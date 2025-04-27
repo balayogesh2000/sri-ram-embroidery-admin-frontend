@@ -31,14 +31,14 @@ const Products = () => {
     fetchProducts();
   }, []);
 
-  const handleArchiveProduct = async (id) => {
-    if (!confirm("Are you sure you want to archive this product?")) return;
+  const handleDeleteProduct = async (id) => {
+    if (!confirm("Are you sure you want to delete this product? This action cannot be undone.")) return;
     try {
-      await api.products.archive(id);
+      await api.products.delete(id);
       setProducts((prevProducts) =>
         prevProducts.filter((product) => product._id !== id)
       );
-      toast.success("Product archived successfully");
+      toast.success("Product deleted successfully");
     } catch (error) {
       handleError(error);
     }
@@ -77,7 +77,7 @@ const Products = () => {
               <ProductCard
                 key={product._id}
                 product={product}
-                handleArchiveProduct={handleArchiveProduct}
+                handleDeleteProduct={handleDeleteProduct}
               />
             ))}
           </div>
