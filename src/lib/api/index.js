@@ -1,6 +1,7 @@
 import axios from "axios";
 import products from "./products";
 import enquiries from "./enquiries";
+import collections from "./collections";
 import auth from "./auth";
 import users from "./users";
 import admin from "./admin";
@@ -18,6 +19,7 @@ const api = {
   products,
   enquiries,
   admin,
+  collections,
 };
 
 export default api;

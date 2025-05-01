@@ -26,6 +26,12 @@ const Layout = ({ children }) => {
                 Products
               </Link>
               <Link
+                href="/collections"
+                className="block py-2.5 px-4 hover:bg-blue-700"
+              >
+                Collections
+              </Link>
+              <Link
                 href="/enquiries"
                 className="block py-2.5 px-4 hover:bg-blue-700"
               >

@@ -10,12 +10,12 @@ const ProductsOverview = ({ totalProducts, latestProducts }) => {
           <h2 className="text-xl font-semibold text-gray-700">
             Total Products
           </h2>
-          <p className="text-3xl font-bold text-blue-600">{totalProducts}</p>
+          <p className="text-3xl font-bold text-orange-600">{totalProducts}</p>
         </div>
 
         {/* View All Products Button */}
         <Link href="/products">
-          <button className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition duration-200">
+          <button className="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition duration-200">
             View All Products
           </button>
         </Link>

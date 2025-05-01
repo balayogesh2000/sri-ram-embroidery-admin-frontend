@@ -2,6 +2,7 @@
 
 import EnquiriesOverview from "@/components/EnquiriesOverview";
 import ProductsOverview from "@/components/ProductsOverview";
+import CollectionsOverview from "@/components/CollectionsOverview";
 import withAuth from "@/hoc/withAuth";
 import api from "@/lib/api";
 import handleError from "@/utils/handleError";
@@ -11,8 +12,10 @@ const Home = () => {
   const [overviewData, setOverviewData] = useState({
     totalProducts: 0,
     totalEnquiries: 0,
+    totalCollections: 0,
     latestProducts: [],
     latestEnquiries: [],
+    latestCollections: [],
   });
 
   useEffect(() => {
@@ -30,13 +33,17 @@ const Home = () => {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <ProductsOverview
-        totalProducts={overviewData.totalProducts}
-        latestProducts={overviewData.latestProducts}
-      />
       <EnquiriesOverview
         totalEnquiries={overviewData.totalEnquiries}
         latestEnquiries={overviewData.latestEnquiries}
+      />
+      <CollectionsOverview
+        totalCollections={overviewData.totalCollections}
+        latestCollections={overviewData.latestCollections}
+      />
+      <ProductsOverview
+        totalProducts={overviewData.totalProducts}
+        latestProducts={overviewData.latestProducts}
       />
     </div>
   );
