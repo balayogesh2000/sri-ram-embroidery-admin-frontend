@@ -10,8 +10,9 @@ import { ArrowLeft } from "lucide-react";
 import api from "@/lib/api";
 import handleError from "@/utils/handleError";
 import PageHeader from "@/components/PageHeader";
+import withAuth from "@/hoc/withAuth";
 
-export default function AddCollection() {
+const AddCollection = () => {
   const router = useRouter();
 
   const formik = useFormik({
@@ -42,7 +43,10 @@ export default function AddCollection() {
 
   return (
     <div className="p-4 max-w-5xl mx-auto">
-      <PageHeader title="Add Collection" />
+      <PageHeader
+        title="Add Collection"
+        onBackClick={() => router.push("/collections")}
+      />
       <form onSubmit={formik.handleSubmit} className="space-y-4">
         <div>
           <label className="block mb-1 font-medium">Name</label>
@@ -82,4 +86,6 @@ export default function AddCollection() {
       </form>
     </div>
   );
-}
+};
+
+export default withAuth(AddCollection);

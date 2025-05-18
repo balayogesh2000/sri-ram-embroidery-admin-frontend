@@ -10,8 +10,10 @@ import api from "@/lib/api";
 import handleError from "@/utils/handleError";
 import InputForm from "@/components/EditProduct/InputForm";
 import ImageUpload from "@/components/EditProduct/ImageUpload";
+import withAuth from "@/hoc/withAuth";
+import PageHeader from "@/components/PageHeader";
 
-export default function EditProduct() {
+function EditProduct() {
   const router = useRouter();
   const { productId } = useParams();
 
@@ -96,17 +98,10 @@ export default function EditProduct() {
 
   return (
     <div className="p-4 max-w-5xl mx-auto">
-      <div className="flex items-center justify-between mb-6">
-        <button
-          onClick={() => router.back()}
-          className="p-2 text-gray-600 hover:text-black"
-        >
-          <ArrowLeft size={24} />
-        </button>
-        <h1 className="text-2xl font-bold text-gray-800 flex-grow text-center">
-          Edit Product
-        </h1>
-      </div>
+      <PageHeader
+        title="Edit Product"
+        onBackClick={() => router.push("/products")}
+      />
       <form onSubmit={formik.handleSubmit} className="flex flex-wrap gap-4">
         <InputForm formik={formik} />
         <ImageUpload formik={formik} />
@@ -122,3 +117,5 @@ export default function EditProduct() {
     </div>
   );
 }
+
+export default withAuth(EditProduct);

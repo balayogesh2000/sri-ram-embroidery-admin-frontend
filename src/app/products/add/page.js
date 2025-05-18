@@ -5,11 +5,13 @@ import * as Yup from "yup";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
-import { ArrowLeft, X, Upload } from "lucide-react";
+import { ArrowLeft, X, Upload, Plus } from "lucide-react";
 import api from "@/lib/api";
 import handleError from "@/utils/handleError";
+import withAuth from "@/hoc/withAuth";
+import PageHeader from "@/components/PageHeader";
 
-export default function AddProduct() {
+function AddProduct() {
   const router = useRouter();
   const [previewImages, setPreviewImages] = useState([]);
 
@@ -81,18 +83,10 @@ export default function AddProduct() {
 
   return (
     <div className="p-4 max-w-5xl mx-auto">
-      {/* Header Section */}
-      <div className="flex items-center justify-between mb-6">
-        <button
-          onClick={() => router.back()}
-          className="p-2 text-gray-600 hover:text-black"
-        >
-          <ArrowLeft size={24} />
-        </button>
-        <h1 className="text-2xl font-bold text-gray-800 flex-grow text-center">
-          Add Product
-        </h1>
-      </div>
+      <PageHeader
+        title="Add Product"
+        onBackClick={() => router.push("/products")}
+      />
 
       {/* Form Section */}
       <form onSubmit={formik.handleSubmit} className="flex flex-wrap gap-4">
@@ -189,3 +183,5 @@ export default function AddProduct() {
     </div>
   );
 }
+
+export default withAuth(AddProduct);

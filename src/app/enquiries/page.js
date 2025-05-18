@@ -4,6 +4,9 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import handleError from "@/utils/handleError";
 import api from "@/lib/api";
+import PageHeader from "@/components/PageHeader";
+import withAuth from "@/hoc/withAuth";
+import { useRouter } from "next/navigation";
 
 function formatDateTime(date) {
   if (!(date instanceof Date)) {
@@ -24,6 +27,7 @@ function formatDateTime(date) {
 
 const EnquiriesPage = () => {
   const [enquiries, setEnquiries] = useState([]);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchAllEnquiries = async () => {
@@ -43,7 +47,7 @@ const EnquiriesPage = () => {
 
   return (
     <div className="w-full">
-      <h1 className="text-2xl font-bold mb-6">Enquiries</h1>
+      <PageHeader title="Enquiries" onBackClick={() => router.push("/")} />
       <div className="w-full bg-white shadow-lg rounded-lg p-6 overflow-x-auto">
         {enquiries.length === 0 ? (
           <p>No enquiries available</p>
@@ -91,4 +95,4 @@ const EnquiriesPage = () => {
   );
 };
 
-export default EnquiriesPage;
+export default withAuth(EnquiriesPage);

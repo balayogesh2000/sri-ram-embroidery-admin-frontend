@@ -14,15 +14,13 @@ import { useParams, useRouter } from "next/navigation";
 import api from "@/lib/api";
 import handleError from "@/utils/handleError";
 import { toast } from "react-toastify";
+import withAuth from "@/hoc/withAuth";
+import PageHeader from "@/components/PageHeader";
 
-export default function ProductPage() {
+function ProductPage() {
   const [product, setProduct] = useState(null);
   const router = useRouter();
   const { productId } = useParams();
-
-  const handleBackClick = () => {
-    router.back();
-  };
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -47,11 +45,7 @@ export default function ProductPage() {
 
   return (
     <section className="mx-auto">
-      <div className="mb-6">
-        <button onClick={handleBackClick} className="text-gray-600">
-          <ArrowLeft size={24} />
-        </button>
-      </div>
+      <PageHeader onBackClick={() => router.push("/products")} />
       <div className="grid md:grid-cols-2 gap-6 items-stretch">
         {/* Image Carousel Section */}
         <div className="relative w-full h-auto flex flex-col justify-center">
@@ -122,3 +116,5 @@ export default function ProductPage() {
     </section>
   );
 }
+
+export default withAuth(ProductPage);

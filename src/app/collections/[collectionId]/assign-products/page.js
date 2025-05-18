@@ -7,8 +7,9 @@ import { useParams, useRouter } from "next/navigation";
 import api from "@/lib/api";
 import { toast } from "react-toastify";
 import PageHeader from "@/components/PageHeader";
+import withAuth from "@/hoc/withAuth";
 
-export default function AssignProductsPage() {
+function AssignProductsPage() {
   const { collectionId } = useParams();
   const router = useRouter();
   const [allProducts, setAllProducts] = useState([]);
@@ -73,6 +74,7 @@ export default function AssignProductsPage() {
     <div className="p-4 max-w-2xl mx-auto">
       <PageHeader
         title={"Assign Products"}
+        onBackClick={() => router.push(`/collections/${collectionId}`)}
         buttons={
           <>
             <button
@@ -133,3 +135,5 @@ export default function AssignProductsPage() {
     </div>
   );
 }
+
+export default withAuth(AssignProductsPage);

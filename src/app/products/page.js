@@ -8,6 +8,7 @@ import handleError from "@/utils/handleError";
 import ProductCard from "@/components/Products/ProductCard";
 import PageHeader from "@/components/PageHeader";
 import { toast } from "react-toastify";
+import withAuth from "@/hoc/withAuth";
 
 const Products = () => {
   const [products, setProducts] = useState([]);
@@ -54,6 +55,7 @@ const Products = () => {
       <div className="container mx-auto">
         <PageHeader
           title="Products"
+          onBackClick={() => router.push("/")}
           buttons={
             <>
               <button
@@ -85,4 +87,4 @@ const Products = () => {
   );
 };
 
-export default Products;
+export default withAuth(Products);

@@ -10,8 +10,9 @@ import handleError from "@/utils/handleError";
 import { toast } from "react-toastify";
 import ProductsSection from "@/components/Collections/ProductsSection";
 import PageHeader from "@/components/PageHeader";
+import withAuth from "@/hoc/withAuth";
 
-export default function CollectionPage() {
+const CollectionPage = () => {
   const { collectionId } = useParams();
   const router = useRouter();
   const [collection, setCollection] = useState(null);
@@ -112,6 +113,7 @@ export default function CollectionPage() {
     <div className="p-4 max-w-5xl mx-auto">
       <PageHeader
         title="Collection Details"
+        onBackClick={() => router.push("/collections")}
         buttons={
           <>
             <button
@@ -183,4 +185,6 @@ export default function CollectionPage() {
       />
     </div>
   );
-}
+};
+
+export default withAuth(CollectionPage);

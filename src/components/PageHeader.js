@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 
-const PageHeader = ({ title, buttons, showBack = true }) => {
+const PageHeader = ({ title, buttons, showBack = true, onBackClick }) => {
   const router = useRouter();
 
   return (
@@ -13,7 +13,7 @@ const PageHeader = ({ title, buttons, showBack = true }) => {
         <div className="flex items-center gap-3">
           {showBack && (
             <button
-              onClick={() => router.back()}
+              onClick={onBackClick || (() => router.back())}
               className="hover:text-gray-600 transition"
             >
               <ArrowLeft className="w-5 h-5" />

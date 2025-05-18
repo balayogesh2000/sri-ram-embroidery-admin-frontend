@@ -2,8 +2,10 @@
 
 import { useAuth } from "@/contexts/AuthContext";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const Layout = ({ children }) => {
+  const router = useRouter();
   const { logout, isLoggedIn } = useAuth();
   return (
     <>
@@ -44,7 +46,12 @@ const Layout = ({ children }) => {
           <div className="flex-1 flex flex-col overflow-hidden">
             {/* Header */}
             <header className="bg-white shadow-sm p-4 flex justify-between items-center">
-              <h1 className="text-xl font-semibold">Admin Panel</h1>
+              <h1
+                className="text-xl font-semibold cursor-pointer"
+                onClick={() => router.push("/")}
+              >
+                Admin Panel
+              </h1>
               <button
                 className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
                 onClick={logout}

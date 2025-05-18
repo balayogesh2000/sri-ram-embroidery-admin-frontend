@@ -4,8 +4,9 @@ import { useEffect, useState } from "react";
 import api from "@/lib/api";
 import { useParams, useRouter } from "next/navigation";
 import handleError from "@/utils/handleError";
-import { ArrowLeft } from "lucide-react";
 import Image from "next/image";
+import PageHeader from "@/components/PageHeader";
+import withAuth from "@/hoc/withAuth";
 import Link from "next/link";
 
 const formatDateTime = (dateString) => {
@@ -46,16 +47,10 @@ const Enquiry = () => {
 
   return (
     <div className="p-6 max-w-5xl mx-auto">
-      {/* Header with Back Button and Title */}
-      <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center gap-4">
-          <ArrowLeft
-            className="cursor-pointer text-gray-700 hover:text-black"
-            onClick={() => router.back()}
-          />
-          <h1 className="text-2xl font-bold">Enquiry Details</h1>
-        </div>
-      </div>
+      <PageHeader
+        title="Enquiry Details"
+        onBackClick={() => router.push("/enquiries")}
+      />
 
       {/* Responsive Layout */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 bg-white shadow-md rounded-lg p-6">
@@ -127,4 +122,4 @@ const Enquiry = () => {
   );
 };
 
-export default Enquiry;
+export default withAuth(Enquiry);

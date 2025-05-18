@@ -6,6 +6,7 @@ import { Plus } from "lucide-react";
 import api from "@/lib/api";
 import handleError from "@/utils/handleError";
 import PageHeader from "@/components/PageHeader";
+import withAuth from "@/hoc/withAuth";
 
 const Collections = () => {
   const [collections, setCollections] = useState([]);
@@ -33,6 +34,7 @@ const Collections = () => {
       <div className="container mx-auto">
         <PageHeader
           title="Collections"
+          onBackClick={() => router.push("/")}
           buttons={
             <button
               onClick={() => router.push("/collections/add")}
@@ -78,4 +80,4 @@ const Collections = () => {
   );
 };
 
-export default Collections;
+export default withAuth(Collections);
